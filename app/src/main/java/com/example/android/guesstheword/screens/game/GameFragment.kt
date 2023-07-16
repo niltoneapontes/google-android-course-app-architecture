@@ -36,8 +36,6 @@ class GameFragment : Fragment() {
 
     private lateinit var viewModel: GameViewModel
 
-
-
     private lateinit var binding: GameFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +51,6 @@ class GameFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
 
-
         binding.correctButton.setOnClickListener { viewModel.onCorrect() }
         binding.skipButton.setOnClickListener { viewModel.onSkip() }
 
@@ -64,16 +61,17 @@ class GameFragment : Fragment() {
         viewModel.word.observe(viewLifecycleOwner, Observer {newWord ->
             binding.wordText.text = newWord.toString()
         })
-        return binding.root
 
+        viewModel.eventGameFinish.observe(viewLifecycleOwner, Observer { isGameFinished ->
+            finishGame()
+        })
+
+        return binding.root
     }
 
-    /**
-     * Called when the game is finished
-     */
-    private fun gameFinished() {
+    private fun finishGame() {
         val action = GameFragmentDirections.actionGameToScore(viewModel.score.value ?: 0)
         findNavController(this).navigate(action)
+        viewModel.onGameFinishComplete()
     }
-
 }
