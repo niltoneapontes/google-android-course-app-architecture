@@ -57,11 +57,11 @@ class GameFragment : Fragment() {
         binding.correctButton.setOnClickListener { viewModel.onCorrect() }
         binding.skipButton.setOnClickListener { viewModel.onSkip() }
 
-        viewModel.score.observe(this, Observer {newScore ->
+        viewModel.score.observe(viewLifecycleOwner, Observer {newScore ->
             binding.scoreText.text = newScore.toString()
         })
 
-        viewModel.word.observe(this, Observer {newWord ->
+        viewModel.word.observe(viewLifecycleOwner, Observer {newWord ->
             binding.wordText.text = newWord.toString()
         })
         return binding.root
